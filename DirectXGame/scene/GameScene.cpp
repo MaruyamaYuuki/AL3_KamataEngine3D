@@ -4,12 +4,15 @@
 #include "ImGuiManager.h"
 #include "PrimitiveDrawer.h"
 #include "WinApp.h"
+#include "DebugCamera.h"
+#include "AxisIndicator.h"
 
 GameScene::GameScene() {}
 
 GameScene::~GameScene() { 
 	delete sprite_;
 	delete model_;
+	delete debugCamera_;
 }
 
 void GameScene::Initialize() {
@@ -34,6 +37,12 @@ void GameScene::Initialize() {
 	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
 	// ライン描画を参照するビュープロジェクションを指定する(アドレス渡し)
 	PrimitiveDrawer::GetInstance()->SetViewProjection(&viewProjection_);
+	// デバッグカメラの生成
+	debugCamera_ = new DebugCamera(1280, 720);
+	// 軸方向表示の表示を有効にする
+	AxisIndicator::GetInstance()->SetVisible(true);
+	// 縦軸表示が参照するビュープロジェクションを指定する（アドレス渡し)
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 }
 
 void GameScene::Update() {
@@ -62,6 +71,8 @@ void GameScene::Update() {
 	ImGui::End();
 	// デモウィンドウの表示を有効か
 	ImGui::ShowDemoWindow();
+    // デバッグカメラの更新
+	debugCamera_->Update();
 	#endif
 }
 
@@ -92,7 +103,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	model_->Draw(worldtransform_, viewProjection_, textureHandle_);
+	model_->Draw(worldtransform_, debugCamera_->GetViewProjection(), textureHandle_);
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
