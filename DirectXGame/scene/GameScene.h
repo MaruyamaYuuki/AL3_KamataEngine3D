@@ -8,6 +8,8 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Player.h"
+#include <vector>
+#include "DebugCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -52,8 +54,14 @@ private: // メンバ変数
 	uint32_t textureHandle_ = 0;
 	// 3Dモデルデータ
 	Model* model_ = nullptr;
+	Model* blockModel_ = nullptr;
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 	// 自キャラ
 	Player* player_ = nullptr;
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+	// デバッグカメラ有効
+	bool isDebugCameraActive_ = false;
+	// デバッグカメラ
+	DebugCamera* debugCamera_ = nullptr;
 };
