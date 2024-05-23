@@ -10,11 +10,13 @@ void Player::Initialize(Model* model, uint32_t textureHandle, ViewProjection* vi
 	viewProjection_ = viewProjection;
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
+	worldTransform_.translation_.y += 2.0f;
 };
 
 void Player::Update() {
 	// 行列を定数バッファに転送
-	worldTransform_.TransferMatrix();
+	worldTransform_.UpdateMatrix();
+
 };
 
 void Player::Draw() {

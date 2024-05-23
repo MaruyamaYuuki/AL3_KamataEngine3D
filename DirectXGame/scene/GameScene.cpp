@@ -7,9 +7,11 @@ GameScene::GameScene() {}
 GameScene::~GameScene() { 
 	delete model_; 
 	delete blockModel_;
+	delete modelSkydome_;
 	// 自キャラの解放
 	delete player_;
-
+	// 天球の解放
+	delete skydome_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -27,14 +29,20 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	textureHandle_ = TextureManager::Load("mario.png");
+	// 3Dモデルの生成
 	model_ = Model::Create();
 	blockModel_ = Model::Create();
+	modelSkydome_ = Model::CreateFromOBJ("Sphere", true);
+	viewProjection_.farZ = 150.0f;
 	viewProjection_.Initialize();
 	// 自キャラの生成
 	player_ = new Player();
 	// 自キャラの初期化
 	player_->Initialize(model_,textureHandle_,&viewProjection_);
-
+	// 天球の生成
+	skydome_ = new Skydome();
+	// 天球の初期化
+	skydome_->Initialize(modelSkydome_, &viewProjection_);
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
 	const uint32_t kNumBlockHorizontal = 20;
@@ -51,7 +59,7 @@ void GameScene::Initialize() {
 	// ブロックの生成
 	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
 		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
-			if ((i + j) % 2 == 0) {
+			if ((i + j) % 2 != 0) {
 				continue; // ブロックを作成せずにスキップ
 			}
 			worldTransformBlocks_[i][j] = new WorldTransform();
@@ -70,6 +78,8 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();
+	// 天球の更新
+	skydome_->Update();
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -130,10 +140,13 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	
-	// 自キャラの描画
-	//player_->Draw();
+	// 天球の描画
+	skydome_->Draw();
 
-	// ブロックの描画
+	// 自キャラの描画
+	player_->Draw();
+
+	// ブロックの描画/
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock) {
