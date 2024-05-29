@@ -11,6 +11,7 @@
 #include <vector>
 #include "DebugCamera.h"
 #include "Skydome.h"
+#include "MapChipFiled.h"
 
 /// <summary>
 /// ゲームシーン
@@ -68,4 +69,6 @@ private: // メンバ変数
 	bool isDebugCameraActive_ = false;
 	// デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
+	// マップチップフィールド
+	MapChipFiled* mapChipFiled_;
 };

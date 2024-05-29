@@ -20,6 +20,7 @@ GameScene::~GameScene() {
 	}
 	worldTransformBlocks_.clear();
 	delete debugCamera_;
+	delete mapChipFiled_;
 }
 
 void GameScene::Initialize() {
@@ -73,6 +74,9 @@ void GameScene::Initialize() {
 	static const int kWindowWidth = 1280; // 横幅
 	static const int kWindowHeight = 720; // 縦幅
 	debugCamera_ = new DebugCamera(kWindowWidth, kWindowHeight);
+
+	mapChipFiled_ = new MapChipFiled;
+	mapChipFiled_->LoadMapChipCsv("Resources/map.csv");
 }
 
 void GameScene::Update() {
