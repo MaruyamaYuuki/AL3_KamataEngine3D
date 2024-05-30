@@ -13,10 +13,10 @@ std::map<std::string, MapChipType> mapChipTable = {
 }
 
 void MapChipFiled::ResetMapChipData() { 
+	// マップチップデータをリセット
     mapChipData_.data.clear(); 
     mapChipData_.data.resize(kNumBlockVirtical);
-	for (std::vector<MapChipType>& mapChipDataLine : mapChipData_.data) {
-	
+	for (std::vector<MapChipType>& mapChipDataLine : mapChipData_.data) {	
     mapChipDataLine.resize(kNumBlockHorizontal);
 	}
 }
@@ -56,7 +56,7 @@ void MapChipFiled::LoadMapChipCsv(const std::string& filePath) {
 	}
 }
 
-MapChipType MapChipFiled::GetMaTypeByIndex(uint32_t xIndex, uint32_t yIndex) { 
+MapChipType MapChipFiled::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex) { 
 	if (xIndex < 0 || kNumBlockHorizontal - 1 < xIndex) {
 		return MapChipType::kBlank;
 	}
