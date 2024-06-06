@@ -21,6 +21,7 @@ GameScene::~GameScene() {
 	worldTransformBlocks_.clear();
 	delete debugCamera_;
 	delete mapChipFiled_;
+	delete cameraController_;
 }
 
 void GameScene::Initialize() {
@@ -46,6 +47,11 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 	// 天球の初期化
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
+	// カメラコントローラの初期化
+	cameraController_ = new CameraController(); // 生成
+	cameraController_->Initialize();            // 初期化
+	cameraController_->SetTarget(player_);      // 追従対象をセット
+	cameraController_->Reset();                 // リセット(瞬間合わせ)
 
 	static const int kWindowWidth = 1280; // 横幅
 	static const int kWindowHeight = 720; // 縦幅
@@ -60,6 +66,8 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();
+	// カメラの更新
+	cameraController_->Update();
 	// 天球の更新
 	skydome_->Update();
 	// ブロックの更新
@@ -88,9 +96,8 @@ void GameScene::Update() {
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
-	} else {
-	
-	// ビュープロジェクション行列の更新と転送
+	}  else {
+		// ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
 }

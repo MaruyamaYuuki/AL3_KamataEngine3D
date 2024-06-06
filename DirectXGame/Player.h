@@ -32,6 +32,8 @@ public:
 
 	float Lerp(float start, float end, float t) { return start + t * (end - start); }
 
+	WorldTransform& GetWorldTransform() { return worldTransform_; }
+
 	private:
 		// ワールド変換データ
 	    WorldTransform worldTransform_;
