@@ -38,8 +38,10 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 	// 自キャラの生成
 	player_ = new Player();
+	// 座標をマップチップ番号で指定
+	Vector3 playerPosition = mapChipFiled_->GetMapChipPositionByIndex(1, 18);
 	// 自キャラの初期化
-	player_->Initialize(model_,textureHandle_,&viewProjection_);
+	player_->Initialize(model_,textureHandle_,&viewProjection_,playerPosition);
 	// 天球の生成
 	skydome_ = new Skydome();
 	// 天球の初期化
