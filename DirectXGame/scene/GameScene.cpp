@@ -37,6 +37,7 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("Sphere", true);
 	viewProjection_.farZ = 150.0f;
 	viewProjection_.Initialize();
+
 	// 自キャラの生成
 	player_ = new Player();
 	// 座標をマップチップ番号で指定
@@ -52,6 +53,8 @@ void GameScene::Initialize() {
 	cameraController_->Initialize();            // 初期化
 	cameraController_->SetTarget(player_);      // 追従対象をセット
 	cameraController_->Reset();                 // リセット(瞬間合わせ)
+	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
+	cameraController_->SetMovebleaArea(cameraArea);
 
 	static const int kWindowWidth = 1280; // 横幅
 	static const int kWindowHeight = 720; // 縦幅
@@ -98,7 +101,10 @@ void GameScene::Update() {
 		viewProjection_.TransferMatrix();
 	}  else {
 		// ビュープロジェクション行列の更新と転送
-		viewProjection_.UpdateMatrix();
+		const ViewProjection& cameraViewProjection = cameraController_->GetViewProjection();
+		viewProjection_.matView = cameraViewProjection.matView;
+		viewProjection_.matProjection = cameraViewProjection.matProjection;
+		viewProjection_.TransferMatrix();
 	}
 }
 

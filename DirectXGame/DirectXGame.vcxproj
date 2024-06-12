@@ -112,6 +112,7 @@
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChipFiled.cpp" />
+    <ClCompile Include="MathUtilityForText.cpp" />
     <ClCompile Include="myMath.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="MapChipFiled.h" />
+    <ClInclude Include="MathUtilityForText.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />
