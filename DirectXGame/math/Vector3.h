@@ -26,6 +26,20 @@ struct Vector3 final {
 		this->z -= other.z;
 		return *this;
 	}
+
+	Vector3& operator*=(float s) {
+		this->x *= s;
+		this->y *= s;
+		this->z *= s;
+		return *this;
+	}
+
+	Vector3& operator*=(const Vector3& other) {
+		this->x *= other.x;
+		this->y *= other.y;
+		this->z *= other.z;
+		return *this;
+	}
 };
 
 

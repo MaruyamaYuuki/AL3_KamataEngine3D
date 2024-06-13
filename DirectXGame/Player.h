@@ -34,6 +34,8 @@ public:
 
 	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
 
+	const Vector3& GetVelocity() const { return velocity_; }
+
 	private:
 		// ワールド変換データ
 	    WorldTransform worldTransform_;
@@ -45,9 +47,9 @@ public:
 
 		Vector3 velocity_ = {};
 
-		static inline const float kAcceleration = 0.1f;
-	    static inline const float kAttenuation = 0.1f;
-	    static inline const float kLimitRunSpeed = 0.1f;
+		static inline const float kAcceleration = 0.3f;
+	    static inline const float kAttenuation = 0.3f;
+	    static inline const float kLimitRunSpeed = 0.3f;
 
 		lRDirection lrDirection_ = lRDirection::kRight;
 		// 旋回開始時の角度
