@@ -47,7 +47,7 @@ void GameScene::Initialize() {
 	// 座標をマップチップ番号で指定
 	Vector3 playerPosition = mapChipFiled_->GetMapChipPositionByIndex(1, 18);
 	// 自キャラの初期化
-	player_->Initialize(modelPlayer_,textureHandle_,&viewProjection_,playerPosition);
+	player_->Initialize(modelPlayer_,&viewProjection_,playerPosition);
 	player_->SetMapChipFiled(mapChipFiled_);
 	// 天球の生成
 	skydome_ = new Skydome();

@@ -38,7 +38,7 @@ public:
 	/// <parm name="model">モデル</param>
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	/// <param neme="viewProjection">ビュープロジェクション</pram>
-	void Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection, const Vector3& position);
+	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
 
 	/// <summary>
 	/// 更新
@@ -60,7 +60,7 @@ public:
 
 	void playerMove();
 
-	void ColisionMap(CollisionMapInfo& info);
+	void CheckMapColision(CollisionMapInfo& info);
 
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
 
@@ -69,6 +69,8 @@ public:
 	void CollisionResultMove(const CollisionMapInfo& info);
 
 	void HitCeiling(const CollisionMapInfo& info);
+
+	void PlayerTurning();
 
 	private:
 		// ワールド変換データ
@@ -96,16 +98,16 @@ public:
 		// 設置状態フラグ
 	    bool onGround_ = true;
 		// 重力加速度（下方向）
-	    static inline const float kGravityAcceleration = 1.0f;
+	    static inline const float kGravityAcceleration = 0.5f;
 		// 最大落下速度（下方向）
 	    static inline const float kLimitFallSpeed = 0.5f;
 		// ジャンプ初速（上方向）
-	    static inline const float kJumpAcceleration = 3.0f;
+	    static inline const float kJumpAcceleration = 1.5f;
 		// マップチップふによるフィールド
 	    MapChipFiled* mapChipFiled_ = nullptr;
 		// キャラクターの当たり判定サイズ
 	    static inline const float kWidth =1.8f;
 	    static inline const float kHeight = 1.8f;
 
-		static inline const float kBlank = 0;
+		static inline const float kBlank = 0.01f;
 };

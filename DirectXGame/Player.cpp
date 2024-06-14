@@ -9,12 +9,11 @@
 
 
 
-void Player::Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection, const Vector3& position) {
+void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
     // NULLポインタチェック
 	assert(model);
 	// 引数をメンバ変数に記録
 	model_ = model;
-	textureHandle_ = textureHandle;
 	viewProjection_ = viewProjection;
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
@@ -32,10 +31,10 @@ void Player::Update() {
 	collisionMapInfo.velocity_ = velocity_;
 
 	// マップ衝突チェック
-	ColisionMap(collisionMapInfo);
-
+	CheckMapColision(collisionMapInfo);
+	// 判定結果を反映して移動
 	CollisionResultMove(collisionMapInfo);
-
+	// 天井に接触している場合の処理
 	HitCeiling(collisionMapInfo);
 	
 	// 着地フラグ
@@ -72,25 +71,7 @@ void Player::Update() {
 	}
 
 	// 旋回制御
-	if (turnTimer_>0.0f)
-	{
-		turnTimer_ -= 1.0f / 60.0f;
-
-		// 左右の自キャラ角度テーブル
-		float destinationRotationYTable[] = {
-			std::numbers::pi_v<float> / 2.0f, 
-			std::numbers::pi_v<float> * 3.0f / 2.0f
-		};
-		// 状態に応じた角度を取得する
-		float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
-
-		    // 補間の割合を計算（0から1までの値）
-		float t = (kTimeTurn - turnTimer_) / kTimeTurn;
-		t = std::clamp(t, 0.0f, 1.0f);
-
-		// 自キャラの角度を設定する
-		worldTransform_.rotation_.y = Lerp(turnFirstRotationY_, destinationRotationY, t);
-	}
+	PlayerTurning();
 
 	// 行列を定数バッファに転送
 	worldTransform_.UpdateMatrix();
@@ -170,64 +151,67 @@ void Player::playerMove() {
 	worldTransform_.translation_.y += velocity_.y;
 }
 
-void Player::ColisionMap(CollisionMapInfo& info) { 
+void Player::CheckMapColision(CollisionMapInfo& info) { 
 	CheckMapCollisionTop(info);
 }
 
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner) { 
-	Vector3 offserTable[kNumCorner] = {
+	Vector3 offsetTable[kNumCorner] = {
 	    {+kWidth / 2.0f, -kHeight / 2.0f, 0},
         {-kWidth / 2.0f, -kHeight / 2.0f, 0},
         {+kWidth / 2.0f, +kHeight / 2.0f, 0},
         {-kWidth / 2.0f, +kHeight / 2.0f, 0}
     };
 
-	return center + offserTable[static_cast<uint32_t>(corner)];
+	return center + offsetTable[static_cast<uint32_t>(corner)];
 }
 
 void Player::CheckMapCollisionTop(CollisionMapInfo& info) {
-	// 移動後の4つの角の座標
-	std::array<Vector3, kNumCorner> positionNew;
+    // 移動後の4つの角の座標
+    std::array<Vector3, kNumCorner> positionNew;
 
-	for (uint32_t i = 0; i < positionNew.size(); ++i) {
-		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.velocity_, static_cast<Corner>(i));
-	}
+    for (uint32_t i = 0; i < positionNew.size(); ++i) {
+        positionNew[i] = CornerPosition(worldTransform_.translation_ + info.velocity_, static_cast<Corner>(i));
+    }
 
-	// 上昇あり？
-	if (info.velocity_.y <= 0) {
-		return;
-	}
+    // 上昇あり？
+    if (info.velocity_.y <= 0) {
+        return;
+    }
 
-	MapChipType mapChipType;
-	// 真上の当たり判定を行う
-	bool hit = false;
+    MapChipType mapChipType;
+    // 真上の当たり判定を行う
+    bool hit = false;
 
-	// 左上点の判定
-	MapChipFiled::IndexSet indexSetLeftTop;
-	indexSetLeftTop = mapChipFiled_->GetMapChipIndexSetByPosition(positionNew[kLeftTop]);
-	mapChipType = mapChipFiled_->GetMapChipTypeByIndex(indexSetLeftTop.xIndex, indexSetLeftTop.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
-	}
+    // 左上点の判定
+    MapChipFiled::IndexSet indexSetLeftTop;
+    indexSetLeftTop = mapChipFiled_->GetMapChipIndexSetByPosition(positionNew[kLeftTop]);
+    mapChipType = mapChipFiled_->GetMapChipTypeByIndex(indexSetLeftTop.xIndex, indexSetLeftTop.yIndex);
+    if (mapChipType == MapChipType::kBlock) {
+        hit = true;
+		DebugText::GetInstance()->ConsolePrintf("Hit left top\n");
+    }
 
-	// 右上点の判定
-	MapChipFiled::IndexSet indexSetRightTop;
-	indexSetRightTop = mapChipFiled_->GetMapChipIndexSetByPosition(positionNew[kRightTop]);
-	mapChipType = mapChipFiled_->GetMapChipTypeByIndex(indexSetRightTop.xIndex, indexSetRightTop.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
-	}
+    // 右上点の判定
+    MapChipFiled::IndexSet indexSetRightTop;
+    indexSetRightTop = mapChipFiled_->GetMapChipIndexSetByPosition(positionNew[kRightTop]);
+    mapChipType = mapChipFiled_->GetMapChipTypeByIndex(indexSetRightTop.xIndex, indexSetRightTop.yIndex);
+    if (mapChipType == MapChipType::kBlock) {
+        hit = true;
+		DebugText::GetInstance()->ConsolePrintf("Hit right top\n");
+    }
 
-	if (hit) {
-		// めり込みを排除する方向に移動量を設定する
-		MapChipFiled::IndexSet indexSet = mapChipFiled_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(0, +kHeight / 2.0f, 0));
-		// めり込み先ブロックの範囲矩形
-		MapChipFiled::Rect rect = mapChipFiled_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
-		info.velocity_.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - (kHeight / 2.0f + kBlank));
-		// 天井に当たったことを記録する
-		info.ceilingFlag = true;
-	}
+    if (hit) {
+        // めり込みを排除する方向に移動量を設定する
+        MapChipFiled::IndexSet indexSet = mapChipFiled_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(0, +kHeight / 2.0f, 0));
+        // めり込み先ブロックの範囲矩形
+        MapChipFiled::Rect rect = mapChipFiled_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+        info.velocity_.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - (kHeight / 2.0f + kBlank));
+        // 天井に当たったことを記録する
+        info.ceilingFlag = true;
+    }
 }
+
 
 void Player::CollisionResultMove(const CollisionMapInfo& info) {
 	// 移動
@@ -239,5 +223,24 @@ void Player::HitCeiling(const CollisionMapInfo& info) {
 	if (info.ceilingFlag) {
 		DebugText::GetInstance()->ConsolePrintf("hit ceiling\n");
 		velocity_.y = 0;
+	}
+}
+
+void Player::PlayerTurning() {
+
+	if (turnTimer_ > 0.0f) {
+		turnTimer_ -= 1.0f / 60.0f;
+
+		// 左右の自キャラ角度テーブル
+		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
+		// 状態に応じた角度を取得する
+		float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+
+		// 補間の割合を計算（0から1までの値）
+		float t = (kTimeTurn - turnTimer_) / kTimeTurn;
+		t = std::clamp(t, 0.0f, 1.0f);
+
+		// 自キャラの角度を設定する
+		worldTransform_.rotation_.y = Lerp(turnFirstRotationY_, destinationRotationY, t);
 	}
 }
