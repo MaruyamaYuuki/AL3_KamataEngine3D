@@ -13,10 +13,24 @@ struct MapChipData {
 	std::vector<std::vector<MapChipType>> data;
 };
 
+
 /// <summary>
 /// マップチップフィールド
 /// </summary>
 class MapChipFiled {
+
+public:
+    struct IndexSet {
+	    uint32_t xIndex;
+	    uint32_t yIndex;
+    };
+	// 範囲矩形
+	struct Rect {
+		float left;   // 左端
+		float right;  // 右端
+		float bottom; // 下端
+		float top;    // 上端
+	};
 
 public:
 	void ResetMapChipData();
@@ -30,6 +44,10 @@ public:
 	uint32_t GetNumBlockVirtical() { return kNumBlockVirtical; }
 
 	uint32_t GetNumBlockHorizontal() { return kNumBlockHorizontal; }
+
+	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
+
+	Rect GetRectByIndex(uint32_t xIndex, uint32_t yIndex);
 
 private:
     // 1ブロックのサイズ
