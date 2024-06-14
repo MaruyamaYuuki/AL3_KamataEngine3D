@@ -33,6 +33,7 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("mario.png");
 	// 3Dモデルの生成
 	model_ = Model::Create();
+	modelPlayer_ = Model::CreateFromOBJ("player", true);
 	blockModel_ = Model::Create();
 	modelSkydome_ = Model::CreateFromOBJ("Sphere", true);
 	viewProjection_.farZ = 150.0f;
@@ -46,7 +47,7 @@ void GameScene::Initialize() {
 	// 座標をマップチップ番号で指定
 	Vector3 playerPosition = mapChipFiled_->GetMapChipPositionByIndex(1, 18);
 	// 自キャラの初期化
-	player_->Initialize(model_,textureHandle_,&viewProjection_,playerPosition);
+	player_->Initialize(modelPlayer_,textureHandle_,&viewProjection_,playerPosition);
 	player_->SetMapChipFiled(mapChipFiled_);
 	// 天球の生成
 	skydome_ = new Skydome();

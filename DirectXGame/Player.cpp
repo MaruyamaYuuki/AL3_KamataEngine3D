@@ -99,7 +99,7 @@ void Player::Update() {
 
 void Player::Draw() {
 	// 3Dモデルを描画
-	model_->Draw(worldTransform_,*viewProjection_,textureHandle_);
+	model_->Draw(worldTransform_,*viewProjection_);
 };
 
 void Player::playerMove() {
