@@ -34,7 +34,7 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
-	blockModel_ = Model::Create();
+	blockModel_ = Model::CreateFromOBJ("block", true);
 	modelSkydome_ = Model::CreateFromOBJ("Sphere", true);
 	viewProjection_.farZ = 150.0f;
 	viewProjection_.Initialize();

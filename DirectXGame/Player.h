@@ -64,12 +64,22 @@ public:
 
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
 
+	// マップ衝突判定上方向
 	void CheckMapCollisionTop(CollisionMapInfo& info);
 
+	// 判定結果を反映して移動させる
 	void CollisionResultMove(const CollisionMapInfo& info);
 
+	// 天井に接触している場合の処理
 	void HitCeiling(const CollisionMapInfo& info);
 
+	// マップ衝突処理下方向
+	void CheckMapCollisionBottom(CollisionMapInfo& info);
+
+	// 接地状態の切り替え処理
+	void UpdataGround(const CollisionMapInfo& info);
+
+	// 旋回処理
 	void PlayerTurning();
 
 	private:
@@ -102,7 +112,7 @@ public:
 		// 最大落下速度（下方向）
 	    static inline const float kLimitFallSpeed = 0.5f;
 		// ジャンプ初速（上方向）
-	    static inline const float kJumpAcceleration = 1.5f;
+	    static inline const float kJumpAcceleration = 1.0f;
 		// マップチップふによるフィールド
 	    MapChipFiled* mapChipFiled_ = nullptr;
 		// キャラクターの当たり判定サイズ
