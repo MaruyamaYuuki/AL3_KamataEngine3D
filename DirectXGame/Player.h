@@ -58,7 +58,7 @@ public:
 
 	void SetMapChipFiled(MapChipFiled* mapChipFiled) { mapChipFiled_ = mapChipFiled; }
 
-	void playerMove();
+	void PlayerMove();
 
 	void CheckMapColision(CollisionMapInfo& info);
 
