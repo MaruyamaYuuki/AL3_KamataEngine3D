@@ -56,7 +56,7 @@ public:
 
 	const Vector3& GetVelocity() const { return velocity_; }
 
-	void SetMapChipFiled(MapChipFiled* mapChipFiled) { mapChipFiled_ = mapChipFiled; }
+	void SetMapChipFiled(MapChipFiled* mapChipFiled) { mapChipField_ = mapChipFiled; }
 
 	void PlayerMove();
 
@@ -67,23 +67,23 @@ public:
 	// マップ衝突判定上方向
 	void CheckMapCollisionTop(CollisionMapInfo& info);
 
-	// 判定結果を反映して移動させる
-	void CollisionResultMove(const CollisionMapInfo& info);
-
-	// 天井に接触している場合の処理
-	void HitCeiling(const CollisionMapInfo& info);
-
 	// マップ衝突処理下方向
 	void CheckMapCollisionBottom(CollisionMapInfo& info);
-
-	// 接地状態の切り替え処理
-	void UpdataGround(const CollisionMapInfo& info);
 
 	// マップ衝突処理右判定
 	void CheckMapCollisionRight(CollisionMapInfo& info);
 
 	// マップ衝突処理左判定
 	void CheckMapCollisionLeft(CollisionMapInfo& info);
+
+	// 判定結果を反映して移動させる
+	void CollisionResultMove(const CollisionMapInfo& info);
+
+	// 天井に接触している場合の処理
+	void HitCeiling(const CollisionMapInfo& info);
+
+	// 接地状態の切り替え処理
+	void UpdataGround(const CollisionMapInfo& info);
 
 	// 壁に接触している場合の処理
 	void UpdataWall(const CollisionMapInfo& info);
@@ -123,7 +123,7 @@ public:
 		// ジャンプ初速（上方向）
 	    static inline const float kJumpAcceleration = 1.0f;
 		// マップチップふによるフィールド
-	    MapChipFiled* mapChipFiled_ = nullptr;
+	    MapChipFiled* mapChipField_ = nullptr;
 		// キャラクターの当たり判定サイズ
 	    static inline const float kWidth =0.8f;
 	    static inline const float kHeight = 0.8f;
