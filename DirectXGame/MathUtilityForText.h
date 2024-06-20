@@ -1,4 +1,6 @@
 #include <Vector3.h>
+#define _USE_MATH_DEFINES
+#include<math.h>
 
 // 2項演算子オーバーロード
 

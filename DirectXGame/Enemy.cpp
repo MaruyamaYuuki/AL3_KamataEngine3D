@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <DebugText.h>
 #include <cmath>
+#include "MathUtilityForText.h"
 
 void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
 	// NULLポインタチェック
@@ -31,9 +32,9 @@ void Enemy::Updata() {
 	// タイマーを加算
 	walkTimer_ += 1.0f / 60.0f;
 	//回転アニメーション
-	float param = std::sin((2*std::numbers::pi_v<float> / 180.0f) * kWalkMotionTime / walkTimer_);
+	float param = std::sin((2 * std::numbers::pi_v<float>)*walkTimer_ / kWalkMotionTime);
 	float radian = kWalkMotionAngleStart + kWalkMotionAngleEnd * (param + 1.0f) / 2.0f;
-	worldTransform_.rotation_.x = radian * (std::numbers::pi_v<float> / 180.0f);
+	worldTransform_.rotation_.x = sinf((radian * float(M_PI)) / 2);
 	// 行列を定数バッファに転送
 	worldTransform_.UpdateMatrix();
 }
