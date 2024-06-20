@@ -37,7 +37,7 @@ void Player::Update() {
 	// 天井に接触している場合の処理
 	HitCeiling(collisionMapInfo);
 	// 壁に接触している場合の処理
-	UpdataWall(collisionMapInfo);
+	//UpdataWall(collisionMapInfo);
 	// 接地状態の切り替え
 	UpdataGround(collisionMapInfo);
 
@@ -51,7 +51,7 @@ void Player::Update() {
 
 void Player::Draw() {
 	// 3Dモデルを描画
-	model_->Draw(worldTransform_,*viewProjection_);
+	model_->Draw(worldTransform_, *viewProjection_);
 };
 
 void Player::playerMove() {
@@ -274,7 +274,6 @@ void Player::CheckMapCollisionBottom(CollisionMapInfo& info) {
 	mapChipType = mapChipFiled_->GetMapChipTypeByIndex(indexSetLeftBottom.xIndex, indexSetLeftBottom.yIndex);
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
-		DebugText::GetInstance()->ConsolePrintf("HitLeftBottom\n");
 	}
 
 	// 右下点の判定
@@ -283,7 +282,6 @@ void Player::CheckMapCollisionBottom(CollisionMapInfo& info) {
 	mapChipType = mapChipFiled_->GetMapChipTypeByIndex(indexSetRightBottom.xIndex, indexSetRightBottom.yIndex);
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
-		DebugText::GetInstance()->ConsolePrintf("HitRightBottom\n");
 	}
 
 	// ブロックにヒット？
@@ -295,7 +293,6 @@ void Player::CheckMapCollisionBottom(CollisionMapInfo& info) {
 		info.velocity_.y = std::min(0.0f, rect.bottom - worldTransform_.translation_.x - (+kHeight / 2.0f + kBlank));
 		// 地面に当たったことを記録する
 		info.landing = true;
-		DebugText::GetInstance()->ConsolePrintf("Hit\n");
 	}
 }
 

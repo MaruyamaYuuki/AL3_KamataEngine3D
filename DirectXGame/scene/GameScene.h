@@ -13,6 +13,7 @@
 #include "Skydome.h"
 #include "MapChipFiled.h"
 #include "CameraController.h"
+#include "Enemy.h"
 
 /// <summary>
 /// ゲームシーン
@@ -62,10 +63,13 @@ private: // メンバ変数
 	Model* modelPlayer_ = nullptr;
 	Model* blockModel_ = nullptr;
 	Model* modelSkydome_ = nullptr;
+	Model* modelEnemy_ = nullptr;
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 	// 自キャラ
 	Player* player_ = nullptr;
+	// 敵
+	Enemy* enemy_ = nullptr;
 	// 天球
 	Skydome* skydome_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
@@ -77,4 +81,5 @@ private: // メンバ変数
 	MapChipFiled* mapChipFiled_;
 	// カメラコントロール
 	CameraController* cameraController_ = nullptr;
+
 };

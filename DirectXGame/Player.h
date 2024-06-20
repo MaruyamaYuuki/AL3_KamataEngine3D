@@ -96,8 +96,6 @@ public:
 	    WorldTransform worldTransform_;
 		// モデル
 	    Model* model_ = nullptr;
-		//　テクスチャハンドル
-	    uint32_t textureHandle_ = 0u;
 	    ViewProjection* viewProjection_ = nullptr;
 
 		Vector3 velocity_ = {};

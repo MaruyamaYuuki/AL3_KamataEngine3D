@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
+#include <DebugText.h>
 
 GameScene::GameScene() {}
 
@@ -8,6 +9,7 @@ GameScene::~GameScene() {
 	delete model_; 
 	delete blockModel_;
 	delete modelSkydome_;
+	delete modelEnemy_;
 	// 自キャラの解放
 	delete player_;
 	// 天球の解放
@@ -22,6 +24,7 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete mapChipFiled_;
 	delete cameraController_;
+	delete enemy_;
 }
 
 void GameScene::Initialize() {
@@ -36,6 +39,7 @@ void GameScene::Initialize() {
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
 	blockModel_ = Model::CreateFromOBJ("block", true);
 	modelSkydome_ = Model::CreateFromOBJ("Sphere", true);
+	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
 	viewProjection_.farZ = 150.0f;
 	viewProjection_.Initialize();
 
@@ -44,11 +48,17 @@ void GameScene::Initialize() {
 	mapChipFiled_->LoadMapChipCsv("Resources/map.csv");
 	// 自キャラの生成
 	player_ = new Player();
+	// 敵の生成
+	enemy_ = new Enemy();
 	// 座標をマップチップ番号で指定
 	Vector3 playerPosition = mapChipFiled_->GetMapChipPositionByIndex(1, 18);
+	Vector3 enemyPosition = mapChipFiled_->GetMapChipPositionByIndex(10, 18);
+	DebugText::GetInstance()->ConsolePrintf("Enemy Position: (%f, %f, %f)\n", enemyPosition.x, enemyPosition.y, enemyPosition.z);
 	// 自キャラの初期化
-	player_->Initialize(modelPlayer_,&viewProjection_,playerPosition);
+	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 	player_->SetMapChipFiled(mapChipFiled_);
+	// 敵の初期化
+	enemy_->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
 	// 天球の生成
 	skydome_ = new Skydome();
 	// 天球の初期化
@@ -73,6 +83,8 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();
+	// 敵キャラの更新
+	enemy_->Updata();
 	// カメラの更新
 	cameraController_->Update();
 	// 天球の更新
@@ -144,6 +156,9 @@ void GameScene::Draw() {
 
 	// 自キャラの描画
 	player_->Draw();
+
+	// 敵の描画
+	enemy_->Draw();
 
 	// ブロックの描画/
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
