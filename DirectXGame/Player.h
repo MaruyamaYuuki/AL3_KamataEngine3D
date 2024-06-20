@@ -132,6 +132,8 @@ public:
 
 		static inline const float kAttenuationWall = 0.3f;
 
+		float offSet = 0.1f;
+
 			// 着地フラグ
 	    bool landing = false;
 };

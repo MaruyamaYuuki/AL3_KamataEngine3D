@@ -151,6 +151,7 @@ void Player::PlayerMove() {
 			velocity_.y = 0.0f;
 			// 接地状態に移行
 			onGround_ = true;
+			DebugText::GetInstance()->ConsolePrintf("landing\n");
 		}
 	}
 }
@@ -240,6 +241,7 @@ void Player::CheckMapCollisionBottom(CollisionMapInfo& info) {
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
+		DebugText::GetInstance()->ConsolePrintf("hitRight\n");
 	}
 
 	// 右下点の判定
@@ -247,6 +249,7 @@ void Player::CheckMapCollisionBottom(CollisionMapInfo& info) {
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
+		DebugText::GetInstance()->ConsolePrintf("hitLeft\n");
 	}
 
 	// ブロックにヒット？
@@ -258,6 +261,7 @@ void Player::CheckMapCollisionBottom(CollisionMapInfo& info) {
 		info.velocity_.y = std::min(0.0f, rect.top - worldTransform_.translation_.y - (+kHeight / 2.0f + kBlank));
 		// 地面に当たったことを記録する
 		info.landing = true;
+		DebugText::GetInstance()->ConsolePrintf("landing\n");
 	}
 }
 
@@ -381,18 +385,18 @@ void Player::UpdataGround(const CollisionMapInfo& info) {
 			// 真下の当たり判定を行う
 			bool ground = false;
 
-			float offSet = 0.01f;
+
 
 			// 左下点の判定
 			MapChipFiled::IndexSet inexSet;
-			inexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] - Vector3(0, offSet, 0));
+			inexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] + Vector3(0, -offSet, 0));
 			mapChipType = mapChipField_->GetMapChipTypeByIndex(inexSet.xIndex, inexSet.yIndex);
 			if (mapChipType == MapChipType::kBlock) {
 				ground = true;
 			}
 
 			// 右下点の判定
-			inexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] - Vector3(0, offSet, 0));
+			inexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] + Vector3(0, -offSet, 0));
 			mapChipType = mapChipField_->GetMapChipTypeByIndex(inexSet.xIndex, inexSet.yIndex);
 			if (mapChipType == MapChipType::kBlock) {
 				ground = true;
@@ -401,6 +405,7 @@ void Player::UpdataGround(const CollisionMapInfo& info) {
 			if (!ground) {
 				// 空中状態に切り替える
 				onGround_ = false;
+				DebugText::GetInstance()->ConsolePrintf("NotonGround\n");
 			}
 		}
 	} else {
@@ -412,6 +417,7 @@ void Player::UpdataGround(const CollisionMapInfo& info) {
 			velocity_.y = 0.0f;
 			// 接地状態に移行
 			onGround_ = true;
+			DebugText::GetInstance()->ConsolePrintf("onGround\n");
 		}
 	}
 }
