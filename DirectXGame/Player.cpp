@@ -40,7 +40,7 @@ void Player::Update() {
 	// 壁に接触している場合の処理
 	UpdataWall(collisionMapInfo);
 	// 接地状態の切り替え
-	//UpdataGround(collisionMapInfo);
+	UpdataGround(collisionMapInfo);
 
 	// 旋回制御
 	PlayerTurning();
@@ -157,7 +157,7 @@ void Player::PlayerMove() {
 
 void Player::CheckMapColision(CollisionMapInfo& info) { 
 	CheckMapCollisionTop(info);
-	//CheckMapCollisionBottom(info);
+	CheckMapCollisionBottom(info);
 	CheckMapCollisionLeft(info);
 	CheckMapCollisionRight(info);
 }
@@ -252,10 +252,10 @@ void Player::CheckMapCollisionBottom(CollisionMapInfo& info) {
 	// ブロックにヒット？
 	if (hit) {
 		// めり込みを排除する方向に移動量を設定する
-		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ - Vector3(0, +kHeight / 2.0f, 0));
+		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ - Vector3(0, kHeight / 2.0f, 0));
 		// めり込み先のブロックの範囲矩形
 		MapChipFiled::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
-		info.velocity_.y = std::min(0.0f, rect.bottom - worldTransform_.translation_.y - (+kHeight / 2.0f + kBlank));
+		info.velocity_.y = std::min(0.0f, rect.top - worldTransform_.translation_.y - (+kHeight / 2.0f + kBlank));
 		// 地面に当たったことを記録する
 		info.landing = true;
 	}
@@ -305,7 +305,6 @@ void Player::CheckMapCollisionRight(CollisionMapInfo& info) {
 	}
 }
 
-
 // 左
 void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {
 	// 左移動あり？
@@ -349,7 +348,6 @@ void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {
 		info.WallFlag = true;
 	}
 }
-
 
 void Player::CollisionResultMove(const CollisionMapInfo& info) {
 	// 移動
