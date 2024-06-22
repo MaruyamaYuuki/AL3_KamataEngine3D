@@ -38,7 +38,7 @@ void Player::Update() {
 	// 天井に接触している場合の処理
 	HitCeiling(collisionMapInfo);
 	// 壁に接触している場合の処理
-	//UpdataWall(collisionMapInfo);
+	UpdataWall(collisionMapInfo);
 	// 接地状態の切り替え
 	UpdataGround(collisionMapInfo);
 
@@ -158,8 +158,8 @@ void Player::PlayerMove() {
 void Player::CheckMapColision(CollisionMapInfo& info) { 
 	CheckMapCollisionTop(info);
 	CheckMapCollisionBottom(info);
-	//CheckMapCollisionLeft(info);
-	//CheckMapCollisionRight(info);
+	CheckMapCollisionLeft(info);
+	CheckMapCollisionRight(info);
 }
 
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner) { 
