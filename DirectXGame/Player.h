@@ -56,9 +56,9 @@ public:
 
 	const Vector3& GetVelocity() const { return velocity_; }
 
-	void SetMapChipFiled(MapChipFiled* mapChipFiled) { mapChipFiled_ = mapChipFiled; }
+	void SetMapChipFiled(MapChipFiled* mapChipFiled) { mapChipField_ = mapChipFiled; }
 
-	void playerMove();
+	void PlayerMove();
 
 	void CheckMapColision(CollisionMapInfo& info);
 
@@ -121,7 +121,7 @@ public:
 		// ジャンプ初速（上方向）
 	    static inline const float kJumpAcceleration = 1.0f;
 		// マップチップふによるフィールド
-	    MapChipFiled* mapChipFiled_ = nullptr;
+	    MapChipFiled* mapChipField_ = nullptr;
 		// キャラクターの当たり判定サイズ
 	    static inline const float kWidth =0.8f;
 	    static inline const float kHeight = 0.8f;
@@ -132,4 +132,6 @@ public:
 
 			// 着地フラグ
 	    bool landing = false;
+
+		float offSet = 0.5f;
 };
