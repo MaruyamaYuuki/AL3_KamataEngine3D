@@ -73,7 +73,7 @@ Vector3 MapChipFiled::GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex
 MapChipFiled::IndexSet MapChipFiled::GetMapChipIndexSetByPosition(const Vector3& position) { 
 	IndexSet indexSet = {};
 	indexSet.xIndex = static_cast<uint32_t>((position.x + kBlockWidth / 2) / kBlockWidth);
-	indexSet.yIndex = static_cast<uint32_t>(kNumBlockVirtical - 1 - ((position.y + kBlockHeight / 2) / kBlockHeight));
+	indexSet.yIndex = kNumBlockVirtical - 1 - static_cast<uint32_t>(position.y + kBlockHeight / 2 / kBlockHeight);
 	return indexSet;
 }
 

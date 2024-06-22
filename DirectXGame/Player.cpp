@@ -38,7 +38,7 @@ void Player::Update() {
 	// 天井に接触している場合の処理
 	HitCeiling(collisionMapInfo);
 	// 壁に接触している場合の処理
-	UpdataWall(collisionMapInfo);
+	//UpdataWall(collisionMapInfo);
 	// 接地状態の切り替え
 	UpdataGround(collisionMapInfo);
 
@@ -151,7 +151,6 @@ void Player::PlayerMove() {
 			velocity_.y = 0.0f;
 			// 接地状態に移行
 			onGround_ = true;
-			DebugText::GetInstance()->ConsolePrintf("landing\n");
 		}
 	}
 }
@@ -159,8 +158,8 @@ void Player::PlayerMove() {
 void Player::CheckMapColision(CollisionMapInfo& info) { 
 	CheckMapCollisionTop(info);
 	CheckMapCollisionBottom(info);
-	CheckMapCollisionLeft(info);
-	CheckMapCollisionRight(info);
+	//CheckMapCollisionLeft(info);
+	//CheckMapCollisionRight(info);
 }
 
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner) { 
@@ -255,7 +254,7 @@ void Player::CheckMapCollisionBottom(CollisionMapInfo& info) {
 	// ブロックにヒット？
 	if (hit) {
 		// めり込みを排除する方向に移動量を設定する
-		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ - Vector3(0, kHeight / 2.0f, 0));
+		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_+info.velocity_ - Vector3(0, kHeight / 2.0f, 0));
 		// めり込み先のブロックの範囲矩形
 		MapChipFiled::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 		info.velocity_.y = std::min(0.0f, rect.top - worldTransform_.translation_.y - (+kHeight / 2.0f + kBlank));
