@@ -126,7 +126,7 @@ public:
 	    static inline const float kWidth =0.8f;
 	    static inline const float kHeight = 0.8f;
 
-		static inline const float kBlank = 0.01f;
+		static inline const float kBlank = 0.5f;
 
 		static inline const float kAttenuationWall = 0.3f;
 
