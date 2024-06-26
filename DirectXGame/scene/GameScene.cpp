@@ -105,6 +105,9 @@ void GameScene::Update() {
 		}
 	}
 
+	// 全ての当たり判定を行う
+	CheckAllCollision();
+
 	#ifdef _DEBUG
 	if (input_->TriggerKey(DIK_RETURN)) {
 		if (!isDebugCameraActive_)
@@ -219,3 +222,39 @@ void GameScene::GenerateBlocks() {
 		}
 	}
 }
+
+bool GameScene::IsCollision(const AABB& aabb1, const AABB& aabb2) {
+	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) && (aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) && (aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z)) {
+		return true;
+	}
+	return false;
+}
+
+void GameScene::CheckAllCollision() {
+
+	#pragma region 自キャラと敵の当たり判定
+	{
+		// 判定1と2の座標
+		AABB aabb1, aabb2;
+
+		// 自キャラの座標
+		aabb1 = player_->GetAABB();
+
+		//自キャラと手の弾全ての当たり判定
+		for (Enemy* enemy : enemies_) {
+			// 敵弾の座標
+			aabb2 = enemy->GetAABB();
+
+			// AABB同士の交差判定
+			if (IsCollision(aabb1, aabb2)) {
+				// 自キャラの衝突時コールバックを呼び出す
+				player_->OnCollision(enemy);
+				// 敵弾の衝突時コールバックを呼び出す
+				enemy->OnCollision(player_);
+			}
+		}
+	}
+	#pragma endregion
+}
+
+

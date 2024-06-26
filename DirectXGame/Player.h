@@ -4,6 +4,8 @@
 
 class MapChipFiled;
 
+class Enemy;
+
 enum class lRDirection {
 	kRight,
 	kLeft,
@@ -91,6 +93,15 @@ public:
 	// 旋回処理
 	void PlayerTurning();
 
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
+
+	// AABBを取得
+	AABB GetAABB();
+
+	// 衝突応答
+	void OnCollision(const Enemy* enemy);
+
 	private:
 		// ワールド変換データ
 	    WorldTransform worldTransform_;
@@ -101,7 +112,7 @@ public:
 		Vector3 velocity_ = {};
 
 		static inline const float kAcceleration = 0.1f;
-	    static inline const float kAttenuation = 0.3f;
+	    static inline const float kAttenuation = 1.0f;
 	    static inline const float kLimitRunSpeed = 0.1f;
 
 		lRDirection lrDirection_ = lRDirection::kRight;
