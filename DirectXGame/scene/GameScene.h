@@ -69,7 +69,7 @@ private: // メンバ変数
 	// 自キャラ
 	Player* player_ = nullptr;
 	// 敵
-	Enemy* enemy_ = nullptr;
+	std::list<Enemy*> enemies_;
 	// 天球
 	Skydome* skydome_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;

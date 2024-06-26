@@ -252,10 +252,10 @@ void Player::CheckMapCollisionBottom(CollisionMapInfo& info) {
 	// ブロックにヒット？
 	if (hit) {
 		// めり込みを排除する方向に移動量を設定する
-		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.velocity_ - Vector3(0, kHeight / 2.0f, 0));
+		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.velocity_ + Vector3(0, -kHeight / 2.0f, 0));
 		// めり込み先のブロックの範囲矩形
 		MapChipFiled::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
-		info.velocity_.y = std::min(0.0f, rect.top - worldTransform_.translation_.y - (+kHeight / 2.0f + kBlank));
+		info.velocity_.y = std::min(0.0f, rect.top - worldTransform_.translation_.y + (+kHeight / 2.0f + kBlank));
 		// 地面に当たったことを記録する
 		info.landing = true;
 		DebugText::GetInstance()->ConsolePrintf("landing\n");
@@ -300,7 +300,7 @@ void Player::CheckMapCollisionRight(CollisionMapInfo& info) {
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(+kWidth / 2.0f, 0, 0));
 		// めり込み先ブロックの範囲矩形
 		MapChipFiled::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
-		info.velocity_.x = std::min(info.velocity_.x, rect.left - (worldTransform_.translation_.x + kWidth / 2.0f + kBlank));
+		info.velocity_.x = std::min(0.0f, rect.left - worldTransform_.translation_.x + (kWidth / 2.0f + kBlank));
 		// 壁に当たったことを判定結果に記録
 		info.WallFlag = true;
 	}
@@ -344,7 +344,7 @@ void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ - Vector3(kWidth / 2.0f, 0, 0));
 		// めり込み先ブロックの範囲矩形
 		MapChipFiled::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
-		info.velocity_.x = std::max(info.velocity_.x, rect.right - (worldTransform_.translation_.x - kWidth / 2.0f - kBlank));
+		info.velocity_.x = std::max(0.0f, rect.right - worldTransform_.translation_.x - (kWidth / 2.0f - kBlank));
 		// 壁に当たったことを判定結果に記録
 		info.WallFlag = true;
 	}
@@ -359,8 +359,6 @@ void Player::HitCeiling(const CollisionMapInfo& info) {
 	// 天井に当たった？
 	if (info.ceilingFlag) {
 		velocity_.y = 0;
-		// 位置も修正する
-		worldTransform_.translation_.y += info.velocity_.y;
 	}
 }
 

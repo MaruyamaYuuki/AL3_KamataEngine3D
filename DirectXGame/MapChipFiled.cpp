@@ -17,7 +17,7 @@ void MapChipFiled::ResetMapChipData() {
     mapChipData_.data.clear(); 
     mapChipData_.data.resize(kNumBlockVirtical);
 	for (std::vector<MapChipType>& mapChipDataLine : mapChipData_.data) {	
-    mapChipDataLine.resize(kNumBlockHorizontal);
+        mapChipDataLine.resize(kNumBlockHorizontal);
 	}
 }
 

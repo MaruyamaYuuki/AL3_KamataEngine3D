@@ -24,7 +24,10 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete mapChipFiled_;
 	delete cameraController_;
-	delete enemy_;
+	for (Enemy*enemy : enemies_) {
+		delete enemy;
+	}
+	enemies_.clear();
 }
 
 void GameScene::Initialize() {
@@ -48,17 +51,18 @@ void GameScene::Initialize() {
 	mapChipFiled_->LoadMapChipCsv("Resources/map.csv");
 	// 自キャラの生成
 	player_ = new Player();
-	// 敵の生成
-	enemy_ = new Enemy();
 	// 座標をマップチップ番号で指定
 	Vector3 playerPosition = mapChipFiled_->GetMapChipPositionByIndex(1, 18);
-	Vector3 enemyPosition = mapChipFiled_->GetMapChipPositionByIndex(10, 18);
-	DebugText::GetInstance()->ConsolePrintf("Enemy Position: (%f, %f, %f)\n", enemyPosition.x, enemyPosition.y, enemyPosition.z);
 	// 自キャラの初期化
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 	player_->SetMapChipFiled(mapChipFiled_);
-	// 敵の初期化
-	enemy_->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
+	// 敵の生成・初期化
+	for (int32_t i = 0; i < 3; ++i) {
+		Enemy* newEnemy = new Enemy();
+		Vector3 enemyPosition = mapChipFiled_->GetMapChipPositionByIndex(10 - i, 18 -i);
+		newEnemy->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
+		enemies_.push_back(newEnemy);
+	}
 	// 天球の生成
 	skydome_ = new Skydome();
 	// 天球の初期化
@@ -84,7 +88,9 @@ void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();
 	// 敵キャラの更新
-	enemy_->Updata();
+	for (Enemy* enemy : enemies_) {
+		enemy->Updata();
+	}
 	// カメラの更新
 	cameraController_->Update();
 	// 天球の更新
@@ -158,7 +164,9 @@ void GameScene::Draw() {
 	player_->Draw();
 
 	// 敵の描画
-	enemy_->Draw();
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw();
+	}
 
 	// ブロックの描画/
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
