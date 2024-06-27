@@ -10,6 +10,7 @@ GameScene::~GameScene() {
 	delete blockModel_;
 	delete modelSkydome_;
 	delete modelEnemy_;
+	delete modelDeathParticles_;
 	// 自キャラの解放
 	delete player_;
 	// 天球の解放
@@ -28,6 +29,8 @@ GameScene::~GameScene() {
 		delete enemy;
 	}
 	enemies_.clear();
+
+	delete deathParticles_;
 }
 
 void GameScene::Initialize() {
@@ -43,6 +46,7 @@ void GameScene::Initialize() {
 	blockModel_ = Model::CreateFromOBJ("block", true);
 	modelSkydome_ = Model::CreateFromOBJ("Sphere", true);
 	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
+	modelDeathParticles_ = Model::CreateFromOBJ("deathParticle", true);
 	viewProjection_.farZ = 150.0f;
 	viewProjection_.Initialize();
 
@@ -52,12 +56,12 @@ void GameScene::Initialize() {
 	// 自キャラの生成
 	player_ = new Player();
 	// 座標をマップチップ番号で指定
-	Vector3 playerPosition = mapChipFiled_->GetMapChipPositionByIndex(1, 18);
+	Vector3 playerPosition = mapChipFiled_->GetMapChipPositionByIndex(5, 14);
 	// 自キャラの初期化
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 	player_->SetMapChipFiled(mapChipFiled_);
 	// 敵の生成・初期化
-	for (int32_t i = 0; i < 3; ++i) {
+	for (int32_t i = 0; i < 1; ++i) {
 		Enemy* newEnemy = new Enemy();
 		Vector3 enemyPosition = mapChipFiled_->GetMapChipPositionByIndex(10 - i, 18 -i);
 		newEnemy->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
@@ -67,6 +71,11 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 	// 天球の初期化
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
+
+	// テストパーティクル
+	deathParticles_ = new DeathParticles;
+	deathParticles_->Initialize(modelDeathParticles_, &viewProjection_, playerPosition);
+
 	// カメラコントローラの初期化
 	cameraController_ = new CameraController(); // 生成
 	cameraController_->Initialize();            // 初期化
@@ -79,18 +88,22 @@ void GameScene::Initialize() {
 	static const int kWindowHeight = 720; // 縦幅
 	debugCamera_ = new DebugCamera(kWindowWidth, kWindowHeight);
 
-
-
 	GenerateBlocks();
 }
 
 void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();
+
 	// 敵キャラの更新
 	for (Enemy* enemy : enemies_) {
 		enemy->Updata();
 	}
+
+	if (deathParticles_) {
+		deathParticles_->Update();
+	}
+
 	// カメラの更新
 	cameraController_->Update();
 	// 天球の更新
@@ -169,6 +182,10 @@ void GameScene::Draw() {
 	// 敵の描画
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
+	}
+
+	if (deathParticles_) {
+		deathParticles_->Draw();
 	}
 
 	// ブロックの描画/

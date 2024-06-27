@@ -14,6 +14,7 @@
 #include "MapChipFiled.h"
 #include "CameraController.h"
 #include "Enemy.h"
+#include "DeathParticles.h"
 
 /// <summary>
 /// ゲームシーン
@@ -69,6 +70,7 @@ private: // メンバ変数
 	Model* blockModel_ = nullptr;
 	Model* modelSkydome_ = nullptr;
 	Model* modelEnemy_ = nullptr;
+	Model* modelDeathParticles_ = nullptr;
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 	// 自キャラ
@@ -86,5 +88,6 @@ private: // メンバ変数
 	MapChipFiled* mapChipFiled_;
 	// カメラコントロール
 	CameraController* cameraController_ = nullptr;
-
+	// デス時のパーティクル
+	DeathParticles* deathParticles_ = nullptr;
 };
