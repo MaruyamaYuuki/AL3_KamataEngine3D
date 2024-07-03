@@ -102,6 +102,10 @@ public:
 	// 衝突応答
 	void OnCollision(const Enemy* enemy);
 
+	
+	// デスフラグのgetter
+	bool IsDead() const { return isDead_; }
+
 	private:
 		// ワールド変換データ
 	    WorldTransform worldTransform_;
@@ -145,4 +149,7 @@ public:
 	    bool landing = false;
 
 		float offSet = 0.5f;
+
+		// デスフラグ
+	    bool isDead_ = false;
 };

@@ -54,6 +54,10 @@ public: // メンバ関数
 
 	bool IsCollision(const AABB& aabb1, const AABB& aabb2);
 
+	// フェーズの切り替え
+	void ChangePhase();
+
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -90,4 +94,14 @@ private: // メンバ変数
 	CameraController* cameraController_ = nullptr;
 	// デス時のパーティクル
 	DeathParticles* deathParticles_ = nullptr;
+	// ゲームのフェーズ（型）
+	enum class Phase { 
+		kPlay,
+	    kDeath,
+	};
+	// ゲームの現在のフェーズ
+	Phase phase_;
+
+	// デスフラグ
+	bool isDead_ = false;
 };
