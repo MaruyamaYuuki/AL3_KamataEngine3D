@@ -137,8 +137,6 @@ void ChengeScene() {
 	switch (scene) {
 	case Scene::kTitle:
 		if (titleScene->IsFinished()) {
-			DebugText::GetInstance()->ConsolePrintf("Finished True\n");
-
 			// シーン変更
 			scene = Scene::kGame;
 			// 旧シーンの解放
@@ -178,11 +176,9 @@ void DrawScene() {
 	switch (scene) {
 	case Scene::kTitle:
 		titleScene->Draw();
-		DebugText::GetInstance()->ConsolePrintf("TitleScene\n");
 		break;
 	case Scene::kGame:
 		gameScene->Draw();
-		DebugText::GetInstance()->ConsolePrintf("GameScene\n");
 		break;
 	}
 }
