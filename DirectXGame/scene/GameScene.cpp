@@ -79,8 +79,6 @@ void GameScene::Initialize() {
 	deathParticles_ = new DeathParticles;
 	deathParticles_->Initialize(modelDeathParticles_, &viewProjection_, playerPosition);
 
-	isDead_ = player_->IsDead();
-
 	// カメラコントローラの初期化
 	cameraController_ = new CameraController(); // 生成
 	cameraController_->Initialize();            // 初期化
@@ -347,7 +345,9 @@ void GameScene::ChangePhase() {
 		}
 		break;
 	case GameScene::Phase::kDeath:
-
+		if (deathParticles_ && deathParticles_->IsFinished()) {
+			finished_ = true;
+		}
 		break;
 	}
 }

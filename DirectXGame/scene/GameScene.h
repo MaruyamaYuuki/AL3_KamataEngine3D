@@ -57,6 +57,8 @@ public: // メンバ関数
 	// フェーズの切り替え
 	void ChangePhase();
 
+	// デスフラグのgetter
+	bool IsFinished() const { return finished_; }
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -103,5 +105,5 @@ private: // メンバ変数
 	Phase phase_;
 
 	// デスフラグ
-	bool isDead_ = false;
+	bool finished_ = false;
 };
