@@ -16,6 +16,8 @@
 #include "Enemy.h"
 #include "DeathParticles.h"
 
+class Fade;
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -98,12 +100,17 @@ private: // メンバ変数
 	DeathParticles* deathParticles_ = nullptr;
 	// ゲームのフェーズ（型）
 	enum class Phase { 
+		kFadeIn,
 		kPlay,
 	    kDeath,
+		kfadeOut,
 	};
 	// ゲームの現在のフェーズ
 	Phase phase_;
 
 	// デスフラグ
 	bool finished_ = false;
+
+	//Fade* fade_ = nullptr;
+	//float fadeTime = 0.5f;
 };

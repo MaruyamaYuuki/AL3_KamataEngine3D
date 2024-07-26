@@ -1,12 +1,12 @@
 #include "Audio.h"
 #include "AxisIndicator.h"
 #include "DirectXCommon.h"
+#include "TitleScene.h"
 #include "GameScene.h"
 #include "ImGuiManager.h"
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
 #include "WinApp.h"
-#include "TitleScene.h"
 #include <DebugText.h>
 
 GameScene* gameScene = nullptr;

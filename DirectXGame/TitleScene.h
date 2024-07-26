@@ -5,11 +5,20 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "Fade.h"
 
 /// <summary>
 /// タイトルシーン
 /// </summary>
 class TitleScene {
+public:
+	// シーンのフェーズ
+	enum class Phase {
+		kFadeIn,
+		kMain,
+		kFadeOut,
+	};
+
 public:
 	TitleScene();
 
@@ -44,4 +53,10 @@ private:
 	static inline const float kWalkMotionTime = 3.0f;
 	// 経過時間
 	float timer_ = 0.0f;
+
+	Fade* fade_ = nullptr;
+	float fadeTime = 0.5f;
+
+	// 現在のフェーズ
+	Phase phase_ = Phase::kFadeIn;
 };
