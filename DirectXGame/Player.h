@@ -116,8 +116,8 @@ public:
 		Vector3 velocity_ = {};
 
 		static inline const float kAcceleration = 0.1f;
-	    static inline const float kAttenuation = 1.0f;
-	    static inline const float kLimitRunSpeed = 0.1f;
+	    static inline const float kAttenuation = 0.05f;
+	    static inline const float kLimitRunSpeed = 0.5f;
 
 		lRDirection lrDirection_ = lRDirection::kRight;
 		// 旋回開始時の角度
@@ -130,25 +130,25 @@ public:
 		// 設置状態フラグ
 	    bool onGround_ = true;
 		// 重力加速度（下方向）
-	    static inline const float kGravityAcceleration = 0.3f;
+	    static inline const float kGravityAcceleration = 0.98f;
 		// 最大落下速度（下方向）
-	    static inline const float kLimitFallSpeed = 0.3f;
+	    static inline const float kLimitFallSpeed = 0.5f;
 		// ジャンプ初速（上方向）
-	    static inline const float kJumpAcceleration = 1.0f;
+	    static inline const float kJumpAcceleration = 20.0f;
 		// マップチップふによるフィールド
 	    MapChipFiled* mapChipField_ = nullptr;
 		// キャラクターの当たり判定サイズ
 	    static inline const float kWidth =0.8f;
 	    static inline const float kHeight = 0.8f;
-
-		static inline const float kBlank = 0.01f;
-
-		static inline const float kAttenuationWall = 0.3f;
+		static inline const float kBlank = 0.04f;
+		static inline const float kAttenuationWall = 0.2f;
+	    static inline const float kAttenuationLanding = 0.0f;
+	    static inline const float kGroundSearchHeight = 0.5f; 
 
 			// 着地フラグ
 	    bool landing = false;
 
-		float offSet = 0.5f;
+		float offSet = 0.06f;
 
 		// デスフラグ
 	    bool isDead_ = false;
