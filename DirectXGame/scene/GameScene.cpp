@@ -50,7 +50,7 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("Sphere", true);
 	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
 	modelDeathParticles_ = Model::CreateFromOBJ("deathParticle", true);
-	viewProjection_.farZ = 150.0f;
+	viewProjection_.farZ = 1100.0f;
 	viewProjection_.Initialize();
 
 	// マップチップフィールドの生成と初期化
