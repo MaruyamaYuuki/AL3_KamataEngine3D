@@ -64,12 +64,7 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 	player_->SetMapChipFiled(mapChipFiled_);
 	// 敵の生成・初期化
-	for (int32_t i = 0; i < 1; ++i) {
-		Enemy* newEnemy = new Enemy();
-		Vector3 enemyPosition = mapChipFiled_->GetMapChipPositionByIndex(10 - i, 18 -i);
-		newEnemy->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
-		enemies_.push_back(newEnemy);
-	}
+
 	// 天球の生成
 	skydome_ = new Skydome();
 	// 天球の初期化
@@ -292,6 +287,17 @@ void GameScene::GenerateBlocks() {
 				worldTransform->Initialize();
 				worldTransformBlocks_[i][j] = worldTransform;
 				worldTransformBlocks_[i][j]->translation_ = mapChipFiled_->GetMapChipPositionByIndex(j, i);
+			}
+		}
+	}
+
+	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
+			if (mapChipFiled_->GetMapChipTypeByIndex(j, i) == MapChipType::kEnemy) {
+				Enemy* newEnemy = new Enemy();
+				Vector3 enemyPosition = mapChipFiled_->GetMapChipPositionByIndex(j, i);
+				newEnemy->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
+				enemies_.push_back(newEnemy);
 			}
 		}
 	}
