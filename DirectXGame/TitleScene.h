@@ -40,8 +40,12 @@ private:
 	DirectXCommon* dxCommon_ = nullptr;
 
 	Model* modelTitle_ = nullptr;
+	Model* modelControl_ = nullptr;
+	Model* modelStart_ = nullptr;
 
 	WorldTransform titleWorldTransform_;
+	WorldTransform ctrlWorldTransform_;
+	WorldTransform startWorldTransform_;
 
 	ViewProjection viewProjection_;
 

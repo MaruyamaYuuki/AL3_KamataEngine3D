@@ -8,6 +8,8 @@ TitleScene::TitleScene() {}
 
 TitleScene::~TitleScene() { 
 	delete modelTitle_; 
+	delete modelControl_;
+	delete modelStart_;
 	delete fade_;
 }
 
@@ -15,9 +17,17 @@ void TitleScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 
 	modelTitle_ = Model::CreateFromOBJ("titleText", true); 
+	modelControl_ = Model::CreateFromOBJ("controlText", true);
+	modelStart_ = Model::CreateFromOBJ("startText", true);
 
 	titleWorldTransform_.Initialize();
-	titleWorldTransform_.translation_.z -= 42.f;
+	titleWorldTransform_.translation_.z -= 42.0f;
+	ctrlWorldTransform_.Initialize();
+	ctrlWorldTransform_.translation_.x -= 7.0f;
+	ctrlWorldTransform_.translation_.z -= 36.0f;
+	startWorldTransform_.Initialize();
+	startWorldTransform_.translation_.y -= 1.5f;
+	startWorldTransform_.translation_.z -= 42.0f;
 
 	viewProjection_.Initialize();
 
@@ -37,6 +47,8 @@ void TitleScene::Update() {
 	titleWorldTransform_.translation_.y = sinf((radian * float(M_PI)) / 2);
 
 	titleWorldTransform_.UpdateMatrix();
+	ctrlWorldTransform_.UpdateMatrix();
+	startWorldTransform_.UpdateMatrix();
 	switch (phase_) {
 	case TitleScene::Phase::kFadeIn:
 		fade_->Update();
@@ -67,6 +79,8 @@ void TitleScene::Draw() {
 	Model::PreDraw(commandList);
 
 	modelTitle_->Draw(titleWorldTransform_, viewProjection_);
+	modelControl_->Draw(ctrlWorldTransform_, viewProjection_);
+	modelStart_->Draw(startWorldTransform_, viewProjection_);
 
 	Model::PostDraw();
 

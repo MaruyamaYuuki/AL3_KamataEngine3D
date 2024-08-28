@@ -48,7 +48,7 @@ void GameScene::Initialize() {
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
 	blockModel_ = Model::CreateFromOBJ("block", true);
 	modelSkydome_ = Model::CreateFromOBJ("Sphere", true);
-	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
+	modelEnemy_ = Model::CreateFromOBJ("noise", true);
 	modelDeathParticles_ = Model::CreateFromOBJ("deathParticle", true);
 	viewProjection_.farZ = 1100.0f;
 	viewProjection_.Initialize();
@@ -79,7 +79,7 @@ void GameScene::Initialize() {
 	cameraController_->Initialize();            // 初期化
 	cameraController_->SetTarget(player_);      // 追従対象をセット
 	cameraController_->Reset();                 // リセット(瞬間合わせ)
-	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
+	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 10.0f};
 	cameraController_->SetMovebleaArea(cameraArea);
 
 	static const int kWindowWidth = 1280; // 横幅
