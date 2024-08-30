@@ -45,6 +45,7 @@ void GameScene::Initialize() {
 	phase_ = Phase::kPlay;
 
 	textureHandle_ = TextureManager::Load("mario.png");
+	soundDataHandle_ = audio_->LoadWave("goalSE.wav");
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
@@ -364,6 +365,7 @@ void GameScene::CheckAllCollision() {
 			// 敵弾の衝突時コールバックを呼び出す
 			goal_->OnCollision(player_);
 			modelDeathParticles_ = Model::CreateFromOBJ("goalParticle", true);
+			audio_->PlayWave(soundDataHandle_);
 		}
 	}
 }
