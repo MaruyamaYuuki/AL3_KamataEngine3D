@@ -341,6 +341,7 @@ void GameScene::CheckAllCollision() {
 				player_->OnCollision(enemy);
 				// 敵弾の衝突時コールバックを呼び出す
 				enemy->OnCollision(player_);
+				modelDeathParticles_ = Model::CreateFromOBJ("deathParticle", true);
 			}
 		}
 	}
@@ -362,6 +363,7 @@ void GameScene::CheckAllCollision() {
 			player_->CollisionGoal(goal_);
 			// 敵弾の衝突時コールバックを呼び出す
 			goal_->OnCollision(player_);
+			modelDeathParticles_ = Model::CreateFromOBJ("goalParticle", true);
 		}
 	}
 }
