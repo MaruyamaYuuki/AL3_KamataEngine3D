@@ -11,10 +11,12 @@ GameScene::~GameScene() {
 	delete modelSkydome_;
 	delete modelEnemy_;
 	delete modelDeathParticles_;
+	delete modelGoal_;
 	// 自キャラの解放
 	delete player_;
 	// 天球の解放
 	delete skydome_;
+	delete goal_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -50,6 +52,7 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("Sphere", true);
 	modelEnemy_ = Model::CreateFromOBJ("noise", true);
 	modelDeathParticles_ = Model::CreateFromOBJ("deathParticle", true);
+	modelGoal_ = Model::CreateFromOBJ("goal", true);
 	viewProjection_.farZ = 1100.0f;
 	viewProjection_.Initialize();
 
@@ -60,11 +63,14 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	// 座標をマップチップ番号で指定
 	Vector3 playerPosition = mapChipFiled_->GetMapChipPositionByIndex(5, 14);
+
 	// 自キャラの初期化
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 	player_->SetMapChipFiled(mapChipFiled_);
-	// 敵の生成・初期化
-
+	// ゴールの生成・初期化
+	goal_ = new Goal();
+	Vector3 goalPosition = mapChipFiled_->GetMapChipPositionByIndex(96, 9);
+	goal_->Initialize(modelGoal_, &viewProjection_, goalPosition);
 	// 天球の生成
 	skydome_ = new Skydome();
 	// 天球の初期化
@@ -104,7 +110,7 @@ void GameScene::Update() {
     	for (Enemy* enemy : enemies_) {
     		enemy->Updata();
     	}
-
+		goal_->Updata();
     	// カメラの更新
     	cameraController_->Update();
 
@@ -150,6 +156,8 @@ void GameScene::Update() {
     	if (deathParticles_) {
     		deathParticles_->Update();
     	}
+
+
 
 		    	// カメラの処理
 		if (isDebugCameraActive_) {
@@ -239,6 +247,8 @@ void GameScene::Draw() {
 	if (deathParticles_) {
 		deathParticles_->Draw();
 	}
+
+	goal_->Draw();
 
 	// ブロックの描画/
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -335,6 +345,25 @@ void GameScene::CheckAllCollision() {
 		}
 	}
 	#pragma endregion
+
+		{
+		// 判定1と2の座標
+		AABB aabb1, aabb2;
+
+		// 自キャラの座標
+		aabb1 = player_->GetAABB();
+
+		// 自キャラと手の弾全ての当たり判定
+		aabb2 = goal_->GetAABB();
+
+		// AABB同士の交差判定
+		if (IsCollision(aabb1, aabb2)) {
+			// 自キャラの衝突時コールバックを呼び出す
+			player_->CollisionGoal(goal_);
+			// 敵弾の衝突時コールバックを呼び出す
+			goal_->OnCollision(player_);
+		}
+	}
 }
 
 void GameScene::ChangePhase() {

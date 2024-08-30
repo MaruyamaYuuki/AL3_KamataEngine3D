@@ -15,6 +15,7 @@
 #include "CameraController.h"
 #include "Enemy.h"
 #include "DeathParticles.h"
+#include "Goal.h"
 
 class Fade;
 
@@ -79,12 +80,15 @@ private: // メンバ変数
 	Model* modelSkydome_ = nullptr;
 	Model* modelEnemy_ = nullptr;
 	Model* modelDeathParticles_ = nullptr;
+	Model* modelGoal_ = nullptr;
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 	// 自キャラ
 	Player* player_ = nullptr;
 	// 敵
 	std::list<Enemy*> enemies_;
+	// ゴール
+	Goal* goal_ = nullptr;
 	// 天球
 	Skydome* skydome_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;

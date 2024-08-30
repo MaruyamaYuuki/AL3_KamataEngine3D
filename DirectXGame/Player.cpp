@@ -58,10 +58,10 @@ void Player::PlayerMove() {
 	// 設置状態
 	if (onGround_) {
 		// 左右移動操作
-		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
+		if (Input::GetInstance()->PushKey(DIK_D) || Input::GetInstance()->PushKey(DIK_A)) {
 			// 左右加速
 			Vector3 acceleration = {};
-			if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+			if (Input::GetInstance()->PushKey(DIK_D)) {
 				// 左移動中の右入力
 				if (velocity_.x < 0.0f) {
 					// 速度と逆方向に入力中は急ブレーキ
@@ -74,7 +74,7 @@ void Player::PlayerMove() {
 					turnFirstRotationY_ = worldTransform_.rotation_.y;
 					turnTimer_ = kTimeTurn;
 				}
-			} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+			} else if (Input::GetInstance()->PushKey(DIK_A)) {
 				// 右移動中の左入力
 				if (velocity_.x > 0.0f) {
 					// 速度と逆方向に入力中は急ブレーキ
@@ -101,7 +101,7 @@ void Player::PlayerMove() {
 		if (std::abs(velocity_.x) <= 0.0001f) {
 			velocity_.x = 0.0f;
 		}
-		if (Input::GetInstance()->PushKey(DIK_UP)) {
+		if (Input::GetInstance()->PushKey(DIK_W)) {
 			// ジャンプ処理
 			Vector3 jumNum(0, kJumpAcceleration / 60.0f, 0);
 			velocity_.x += jumNum.x;
@@ -495,6 +495,12 @@ AABB Player::GetAABB() {
 
 void Player::OnCollision(const Enemy* enemy) { 
 	(void)enemy; 
+
+	isDead_ = true;
+}
+
+void Player::CollisionGoal(const Goal* goal) {
+	(void)goal;
 
 	isDead_ = true;
 }

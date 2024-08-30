@@ -6,6 +6,8 @@ class MapChipFiled;
 
 class Enemy;
 
+class Goal;
+
 enum class lRDirection {
 	kRight,
 	kLeft,
@@ -106,6 +108,8 @@ public:
 	// デスフラグのgetter
 	bool IsDead() const { return isDead_; }
 
+	void CollisionGoal(const Goal* goal);
+
 	private:
 		// ワールド変換データ
 	    WorldTransform worldTransform_;
@@ -152,4 +156,6 @@ public:
 
 		// デスフラグ
 	    bool isDead_ = false;
+
+		bool isGoal_ = false;
 };
